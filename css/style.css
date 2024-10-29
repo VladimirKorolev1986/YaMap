@@ -4,3 +4,19 @@
     background-color: #333;
 
 }
+
+[class*="copyrights-pane"] {
+    display: none !important;
+}
+
+[class*="ground-pane"] {
+    filter: grayscale(1);
+}
+
+.balloon_address{
+    color: yellow;
+}
+
+.balloon a{
+    color: red;
+}

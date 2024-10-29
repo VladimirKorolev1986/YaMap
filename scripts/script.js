@@ -7,14 +7,36 @@ function init() {
     })
 
 
-    let placemark = new ymaps.Placemark(center, {}, {
+    let placemark = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
+        balloonContentHeader: ' Хедер балуна',
+        balloonContentBody: 'Боди балуна',
+        balloonContentFooter: 'Подвал',
+    }, {
         iconLayout: 'default#image',
         iconImageHref: '/location-pin.png',
-        IcomImageSize: [20, 20],
-        IconImageOffset: [0, 0]
+        IcomImageSize: [5, 5],
+        IconImageOffset: [-10, -10],
     })
 
-    map.geoObjects.add(placemark)
+    let placemark1 = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
+        balloonContent: `
+        <div class="balloon">
+            <div class="balloon_address">г. Париж</div>
+            <div class="balloon_contacts">
+            <a href="tel:+79999999999">+79999999999</a>
+</div>
+        </div>
+        `
+    }, {
+        iconLayout: 'default#image',
+        iconImageHref: '/location-pin.png',
+        IcomImageSize: [5, 5],
+        IconImageOffset: [-10, -10],
+    })
+
+    // map.geoObjects.add(placemark)
+    map.geoObjects.add(placemark1)
+
 }
 ymaps.ready(init);
 
