@@ -7,6 +7,20 @@ function init() {
         controls: ['routePanelControl']
     })
 
+    let control = map.controls.get('routePanelControl')
+    let city = 'Балашиха'
+
+
+    control.routePanel.state.set({
+        type: 'masstransit',
+        fromEnabled: false,
+        from: locationText,
+        toEnabled: true,
+        to: `${city}, Невский проспект 146`,
+    });
+
+    
+
 
     let placemark = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
         balloonContentHeader: ' Хедер балуна',
