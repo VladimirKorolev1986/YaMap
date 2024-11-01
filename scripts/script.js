@@ -5,21 +5,25 @@ function init() {
         center: center,
         zoom: 15,
         controls: ['routePanelControl']
-    })
+    });
 
-    let control = map.controls.get('routePanelControl')
-    let city = 'Балашиха'
+    let control = map.controls.get('routePanelControl');
+    let city = 'Балашиха';
+    let location = ymaps.geolocation.get();
 
+    location.then(function (res) {
+        let locationText = res.geoObjects.get(0).properties.get('text');
+        console.log(locationText)
+    });
 
     control.routePanel.state.set({
         type: 'masstransit',
         fromEnabled: false,
         from: locationText,
-        toEnabled: true,
-        to: `${city}, Невский проспект 146`,
+
     });
 
-    
+
 
 
     let placemark = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
@@ -31,7 +35,7 @@ function init() {
         iconImageHref: '/location-pin.png',
         IcomImageSize: [5, 5],
         IconImageOffset: [-10, -10],
-    })
+    });
 
     let placemark1 = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
         balloonContent: `
