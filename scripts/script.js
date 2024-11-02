@@ -1,61 +1,68 @@
-let center = [55.74074112342451, 37.99879782368382]
+ymaps.ready(function () {
 
-function init() {
-    let map = new ymaps.Map('map-test', {
-        center: center,
+    let myMap = new ymaps.Map('map-test', {
+        center: [59.91795236804815, 30.304908500000003],
         zoom: 15,
         controls: ['routePanelControl']
     });
 
-    let control = map.controls.get('routePanelControl');
-    let city = 'Балашиха';
-    let location = ymaps.geolocation.get();
+    let control = myMap.controls.get('routePanelControl');
+    let city = 'Санкт-Петербург';
 
-    location.then(function (res) {
-        let locationText = res.geoObjects.get(0).properties.get('text');
+    // let location = ymaps.geolocation.get();
+
+    // location.then(function(res) {
+    // 	let locationText = res.geoObjects.get(0).properties.get('text');
+    // 	console.log(locationText)
+    // });
+
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+    function success(pos) {
+        const crd = pos.coords;
+
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+
+
+        let reverseGeocoder = ymaps.geocode([crd.latitude, crd.longitude]);
+        let locationText = null;
+        reverseGeocoder.then(function (res) {
+            locationText = res.geoObjects.get(0).properties.get('text')
+            console.log(locationText)
+
+            control.routePanel.state.set({
+                type: 'masstransit',
+                fromEnabled: false,
+                from: locationText,
+                toEnabled: true,
+                to: `${city}, Невский проспект 146`,
+            });
+        });
+
         console.log(locationText)
-    });
-
-    control.routePanel.state.set({
-        type: 'masstransit',
-        fromEnabled: false,
-        from: locationText,
-
-    });
 
 
 
+        control.routePanel.options.set({
+            types: {
+                masstransit: true,
+                pedestrian: true,
+                taxi: true
+            }
+        })
+    }
 
-    let placemark = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
-        balloonContentHeader: ' Хедер балуна',
-        balloonContentBody: 'Боди балуна',
-        balloonContentFooter: 'Подвал',
-    }, {
-        iconLayout: 'default#image',
-        iconImageHref: '/location-pin.png',
-        IcomImageSize: [5, 5],
-        IconImageOffset: [-10, -10],
-    });
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
 
-    let placemark1 = new ymaps.Placemark([55.7412859505367,38.003684279816184], {
-        balloonContent: `
-        <div class="balloon">
-            <div class="balloon_address">г. Париж</div>
-            <div class="balloon_contacts">
-            <a href="tel:+79999999999">+79999999999</a>
-</div>
-        </div>
-        `
-    }, {
-        iconLayout: 'default#image',
-        iconImageHref: '/location-pin.png',
-        IcomImageSize: [5, 5],
-        IconImageOffset: [-10, -10],
-    })
+    navigator.geolocation.getCurrentPosition(success, error, options);
 
-    // map.geoObjects.add(placemark)
-    map.geoObjects.add(placemark1)
 
-}
-ymaps.ready(init);
 
+});
